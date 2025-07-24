@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { useAuthStore } from "~~/stores/auth";
+
+const authStore = useAuthStore();
+</script>
+
 <template>
   <div class="hero bg-base-300 container mx-auto mt-4">
     <div class="hero-content text-center min-h-96">
@@ -10,7 +16,14 @@
           travel log app. Add locations, photos and notes to create a
           digital journey of your journeys.
         </p>
-        <AuthButton />
+        <AuthButton v-if="!authStore.user" />
+        <NuxtLink
+          v-else
+          to="/dashboard"
+          class="btn btn-primary"
+        >
+          Start Logging
+        </NuxtLink>
       </div>
     </div>
   </div>
