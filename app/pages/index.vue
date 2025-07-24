@@ -10,10 +10,7 @@
           travel log app. Add locations, photos and notes to create a
           digital journey of your journeys.
         </p>
-        <button class="btn btn-primary">
-          Sign In with GitHub
-          <Icon name="tabler:brand-github" size="24" />
-        </button>
+        <AuthButton />
       </div>
     </div>
   </div>

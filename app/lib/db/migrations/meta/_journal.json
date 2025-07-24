@@ -15,6 +15,13 @@
       "when": 1753355389249,
       "tag": "0001_flimsy_robin_chapel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1753359673222,
+      "tag": "0002_white_hawkeye",
+      "breakpoints": true
     }
   ]
 }
