@@ -21,7 +21,7 @@ async function signIn() {
     @click="signIn"
   >
     Sign In With Github
-    <span v-if="loading" class="loading loading-soinner loading-md" />
+    <span v-if="loading" class="loading loading-spinner loading-md" />
     <Icon
       v-else
       name="tabler:brand-github"
