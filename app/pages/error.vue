@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const error = route.query.error || "Unknown error occured.";
+const error = route.query.error || "An unknown error occured.";
 </script>
 
 <template>
