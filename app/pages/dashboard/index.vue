@@ -1,3 +1,48 @@
+<script setup lang="ts">
+const isSidebarOpen = ref(true);
+</script>
+
 <template>
-  <h1>You are logged in</h1>
+  <div class="flex-1 flex">
+    <div class="bg-base-100 transition-all duration-300" :class="{ 'w-64': isSidebarOpen, 'w-16': !isSidebarOpen }">
+      <div
+        class="flex hover:cursor-pointer hover:bg-base-200 p-2"
+        :class="{ 'justify-center': !isSidebarOpen, 'justify-end': isSidebarOpen }"
+        @click="isSidebarOpen = !isSidebarOpen"
+      >
+        <Icon
+          v-if="isSidebarOpen"
+          name="tabler:chevron-left"
+          size="32"
+        />
+        <Icon
+          v-else
+          name="tabler:chevron-right"
+          size="32"
+        />
+      </div>
+      <div class="flex flex-col">
+        <SidebarButton
+          :show-label="isSidebarOpen"
+          href="/dashboard"
+          icon="tabler:map"
+          label="Locations"
+        />
+        <SidebarButton
+          :show-label="isSidebarOpen"
+          href="/dashboard/add"
+          icon="tabler:circle-plus-filled"
+          label="Add Location"
+        />
+        <div class="divider" />
+        <SidebarButton
+          :show-label="isSidebarOpen"
+          href="/sign-out"
+          icon="tabler:logout-2"
+          label="Sign Out"
+        />
+      </div>
+    </div>
+    <div class="flex-1" />
+  </div>
 </template>
