@@ -1,14 +1,47 @@
 <script setup lang="ts">
+import type { FetchError } from "ofetch";
+
 import { toTypedSchema } from "@vee-validate/zod";
 
 import { InsertLocation } from "~/lib/db/schema";
 
-const { handleSubmit, errors } = useForm({
+const router = useRouter();
+const loading = ref(false);
+const submitError = ref("");
+const { handleSubmit, errors, meta, setErrors } = useForm({
   validationSchema: toTypedSchema(InsertLocation),
 });
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values);
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    submitError.value = "";
+    loading.value = true;
+    const inserted = await $fetch("/api/locations", {
+      method: "post",
+      body: values,
+    });
+    console.log(inserted);
+  }
+  catch (e) {
+    const error = e as FetchError;
+    if (error.data?.data) {
+      setErrors(error.data?.data);
+    }
+
+    submitError.value = error.statusMessage || "An unknown error occured!";
+  }
+  loading.value = false;
+});
+
+onBeforeRouteLeave(() => {
+  if (meta.value.dirty) {
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm("Are you sure you want to leave? All changes will be deleted.");
+    if (!confirm) {
+      return false;
+    }
+  }
+  return true;
 });
 </script>
 
@@ -24,39 +57,64 @@ const onSubmit = handleSubmit((values) => {
         A location is a place you have traveled or will travel to. It can be city, country, state or point of interest. You can add specific times you visited this location after adding it.
       </p>
     </div>
+    <div
+      v-if="submitError"
+      role="alert"
+      class="alert alert-error"
+    >
+      <span>{{ submitError }}</span>
+    </div>
     <form class="flex flex-col gap-2" @submit.prevent="onSubmit">
       <FormField
         name="name"
         label="Name"
         type="text"
         :error="errors.name"
+        :disabled="loading"
       />
       <FormField
         name="description"
         label="Description"
         type="textarea"
         :error="errors.description"
+        :disabled="loading"
       />
       <FormField
         name="lat"
         label="Latitude"
-        type="text"
+        type="number"
         :error="errors.lat"
+        :disabled="loading"
       />
       <FormField
         name="long"
         label="Longitude"
-        type="text"
+        type="number"
         :error="errors.long"
+        :disabled="loading"
       />
       <div class="flex justify-end gap-2">
-        <button type="button" class="btn btn-outline">
+        <button
+          :disabled="loading"
+          type="button"
+          class="btn btn-outline"
+          @click="router.back()"
+        >
           <Icon name="tabler:arrow-left" size="24" />
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary">
+        <button
+          :disabled="loading"
+          type="submit"
+          class="btn btn-primary"
+        >
           Add
-          <Icon name="tabler:circle-plus-filled" size="24" />
+          <span v-if="loading" class="loading loading-spinner loading-sm" />
+          <Icon
+            v-else
+            name="tabler:circle-plus-filled"
+            size="24"
+          />
         </button>
       </div>
     </form>

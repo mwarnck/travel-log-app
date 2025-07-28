@@ -2,8 +2,9 @@
 const props = defineProps<{
   label: string;
   name: string;
-  type: "text" | "textarea";
+  type: "text" | "textarea" | "number";
   error?: string;
+  disabled?: boolean;
 }>();
 </script>
 
@@ -16,6 +17,7 @@ const props = defineProps<{
       :as="props.type === 'textarea' ? 'textarea' : 'input'"
       :name="props.name"
       :type="props.type"
+      :disabled="props.disabled"
       class="w-full"
       :class="{
         'input-error': props.error,
