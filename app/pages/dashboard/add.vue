@@ -7,6 +7,7 @@ import { InsertLocation } from "~/lib/db/schema";
 
 const router = useRouter();
 const loading = ref(false);
+const submitted = ref(false);
 const submitError = ref("");
 const { handleSubmit, errors, meta, setErrors } = useForm({
   validationSchema: toTypedSchema(InsertLocation),
@@ -16,11 +17,12 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     submitError.value = "";
     loading.value = true;
-    const inserted = await $fetch("/api/locations", {
+    await $fetch("/api/locations", {
       method: "post",
       body: values,
     });
-    console.log(inserted);
+    submitted.value = true;
+    navigateTo("/dashboard");
   }
   catch (e) {
     const error = e as FetchError;
@@ -34,7 +36,7 @@ const onSubmit = handleSubmit(async (values) => {
 });
 
 onBeforeRouteLeave(() => {
-  if (meta.value.dirty) {
+  if (meta.value.dirty && !submitted.value) {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm("Are you sure you want to leave? All changes will be deleted.");
     if (!confirm) {
