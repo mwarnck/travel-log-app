@@ -45,11 +45,11 @@ const sidebarStore = useSidebarStore();
           icon="tabler:circle-plus-filled"
           label="Add Location"
         />
-        <div class="divider" />
+        <div v-if="sidebarStore.loading || sidebarStore.sidebarItems.length" class="divider" />
         <div v-if="sidebarStore.loading" class="px-4">
           <div class="skeleton h-4 w-full" />
         </div>
-        <div v-else class="flex flex-col">
+        <div v-else-if="sidebarStore.sidebarItems.length" class="flex flex-col">
           <SidebarButton
             v-for="item in sidebarStore.sidebarItems"
             :key="item.id"
