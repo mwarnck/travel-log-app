@@ -46,14 +46,19 @@ const sidebarStore = useSidebarStore();
           label="Add Location"
         />
         <div class="divider" />
-        <SidebarButton
-          v-for="item in sidebarStore.sidebarItems"
-          :key="item.id"
-          :show-label="isSidebarOpen"
-          :icon="item.icon"
-          :label="item.label"
-          :href="item.href"
-        />
+        <div v-if="sidebarStore.loading" class="px-4">
+          <div class="skeleton h-4 w-full" />
+        </div>
+        <div v-else class="flex flex-col">
+          <SidebarButton
+            v-for="item in sidebarStore.sidebarItems"
+            :key="item.id"
+            :show-label="isSidebarOpen"
+            :icon="item.icon"
+            :label="item.label"
+            :href="item.href"
+          />
+        </div>
         <div class="divider" />
         <SidebarButton
           :show-label="isSidebarOpen"

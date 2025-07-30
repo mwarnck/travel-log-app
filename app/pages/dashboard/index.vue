@@ -9,6 +9,7 @@ const sidebarStore = useSidebarStore();
 
 watchEffect(() => {
   if (data.value) {
+    sidebarStore.loading = false;
     sidebarStore.sidebarItems = data.value.map((location: { name: any; id: any }) => ({
       id: `location-${location.id}`,
       label: location.name,
@@ -16,6 +17,8 @@ watchEffect(() => {
       href: "#",
     }));
   }
+
+  sidebarStore.loading = status.value === "pending";
 });
 </script>
 
