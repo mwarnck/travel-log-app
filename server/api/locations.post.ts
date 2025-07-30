@@ -2,17 +2,11 @@ import type { DrizzleError } from "drizzle-orm";
 
 import slugify from "slug";
 
-import { InsertLocation } from "~/lib/db/schema";
-
 import { findLocationByName, findUniqueSlug, insertLocation } from "../../app/lib/db/queries/location";
+import { InsertLocation } from "../../app/lib/db/schema";
+import defineAuthenticatedEventHandler from "../utils/define-authenticated-event-handler";
 
-export default defineEventHandler(async (event) => {
-  if (!event.context.user) {
-    return sendError(event, createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    }));
-  }
+export default defineAuthenticatedEventHandler(async (event) => {
   const result = await readValidatedBody(event, InsertLocation.safeParse);
 
   if (!result.success) {
