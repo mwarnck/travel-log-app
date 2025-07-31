@@ -1,7 +1,13 @@
 import { useSidebarStore } from "./sidebar";
 
+type Locations = {
+  id: string;
+  name: string;
+  description: string;
+}[];
+
 export const useLocationStore = defineStore("useLocationStore", () => {
-  const { data, status, refresh } = useFetch("/api/locations", {
+  const { data, status, refresh } = useFetch<Locations>("/api/locations", {
     lazy: true,
   });
 
