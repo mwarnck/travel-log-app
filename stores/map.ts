@@ -36,7 +36,7 @@ export const useMapStore = defineStore("useMapStore", () => {
 
     effect(() => {
       if (selectedMapPoint.value) {
-        if (withFlyTo) {
+        if (withFlyTo.value) {
           map.map?.flyTo({
             center: [selectedMapPoint.value.long, selectedMapPoint.value.lat],
             speed: 0.6,
