@@ -31,8 +31,9 @@ onMounted(() => {
         <div
           class="tooltip tooltip-top hover: cursor-pointer"
           :data-tip="mapPoint.name"
-          @mouseenter="mapStore.selectedMapPoint = mapPoint"
-          @mouseleave="mapStore.selectedMapPoint = null"
+          :class="{ 'tooltip-open': mapStore.selectedMapPoint === mapPoint }"
+          @mouseenter="mapStore.selectMapPointWithoutFlyTo(mapPoint)"
+          @mouseleave="mapStore.selectMapPointWithoutFlyTo(null)"
         >
           <Icon
             name="tabler:map-pin-filled"
