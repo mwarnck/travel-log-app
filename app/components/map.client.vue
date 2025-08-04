@@ -28,17 +28,22 @@ onMounted(() => {
       :coordinates="[mapPoint.long, mapPoint.lat]"
     >
       <template #marker>
-        <div class="tooltip tooltip-top" :data-tip="mapPoint.label">
+        <div
+          class="tooltip tooltip-top hover: cursor-pointer"
+          :data-tip="mapPoint.name"
+          @mouseenter="mapStore.selectedMapPoint = mapPoint"
+          @mouseleave="mapStore.selectedMapPoint = null"
+        >
           <Icon
             name="tabler:map-pin-filled"
             size="32"
-            class="text-secondary"
+            :class="mapStore.selectedMapPoint === mapPoint ? 'text-accent' : 'text-secondary'"
           />
         </div>
       </template>
       <MglPopup>
         <h3 class="text-xl">
-          {{ mapPoint.label }}
+          {{ mapPoint.name }}
         </h3>
         <p v-if="mapPoint.description">
           {{ mapPoint.description }}

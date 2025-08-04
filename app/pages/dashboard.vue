@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useLocationStore } from "~~/stores/location";
+import { useMapStore } from "~~/stores/map";
 import { useSidebarStore } from "~~/stores/sidebar";
 
 const locationsStore = useLocationStore();
 
 const sidebarStore = useSidebarStore();
+
+const mapStore = useMapStore();
 
 const isSidebarOpen = ref(true);
 
@@ -66,6 +69,9 @@ function toggleSidebar() {
             :icon="item.icon"
             :label="item.label"
             :href="item.href"
+            :icon-color="mapStore.selectedMapPoint === item.location ? 'text-accent' : undefined"
+            @mouseenter="mapStore.selectedMapPoint = item.location ?? null"
+            @mouseleave="mapStore.selectedMapPoint = null"
           />
         </div>
         <div class="divider" />
