@@ -117,7 +117,10 @@ onBeforeRouteLeave(() => {
         :error="errors.description"
         :disabled="loading"
       />
-      <p>Drag the <Icon name="tabler:map-pin-filles" class="text-warning" /> marker to the desired location.</p>
+      <p>
+        Drag the <Icon name="tabler:map-pin-filles" class="text-warning" /> marker to the desired location.
+      </p>
+      <p>Or double click on the specific location on the map.</p>
       <p class="text-xs text-gray-400">
         Current location: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
       </p>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { MglEvent } from "@indoorequal/vue-maplibre-gl";
 import type { LngLat } from "maplibre-gl";
 
 import { useMapStore } from "~~/stores/map";
@@ -11,6 +12,13 @@ const colorMode = useColorMode();
 const style = computed(() => colorMode.value === "dark" ? "/styles/dark.json" : "https://tiles.openfreemap.org/styles/liberty",
 );
 const zoom = 5;
+
+function onDoubleClick(event: MglEvent<"dblclick">) {
+  if (mapStore.addedMapPoint) {
+    mapStore.addedMapPoint.long = event.event.lngLat.lng;
+    mapStore.addedMapPoint.lat = event.event.lngLat.lat;
+  }
+}
 
 function updateAddedMapPoint(location: LngLat) {
   if (mapStore.addedMapPoint) {
@@ -29,12 +37,13 @@ onMounted(() => {
     :map-style="style"
     :center="CENTER_EUROPE"
     :zoom="zoom"
+    @map:dblclick="onDoubleClick"
   >
     <MglNavigationControl />
     <MglMarker
       v-if="mapStore.addedMapPoint"
       draggable
-      :coordinates="CENTER_EUROPE"
+      :coordinates="[mapStore.addedMapPoint.long, mapStore.addedMapPoint.lat]"
       @update:coordinates="updateAddedMapPoint"
     >
       <template #marker>
