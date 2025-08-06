@@ -5,7 +5,7 @@ import type { MapPoint } from "../app/lib/types";
 export const useMapStore = defineStore("useMapStore", () => {
   const mapPoints = ref<MapPoint[]>([]);
   const selectedMapPoint = ref<MapPoint | null>(null);
-  const addedMapPoint = ref<MapPoint | null>(null);
+  const addedMapPoint = ref<MapPoint & { centerMap?: boolean } | null>(null);
 
   async function init() {
     const { useMap } = await import("@indoorequal/vue-maplibre-gl");
@@ -30,7 +30,7 @@ export const useMapStore = defineStore("useMapStore", () => {
     });
 
     watch(addedMapPoint, (newValue, oldValue) => {
-      if (newValue && !oldValue) {
+      if ((newValue && !oldValue) || newValue?.centerMap) {
         map.map?.flyTo({
           center: [newValue.long, newValue.lat],
           speed: 0.6,

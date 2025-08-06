@@ -4,6 +4,8 @@ import type { FetchError } from "ofetch";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useMapStore } from "~~/stores/map";
 
+import type { NominatimResult } from "~/lib/types";
+
 import { CENTER_EUROPE } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
 
@@ -51,6 +53,18 @@ function formatNumber(value?: number) {
   if (!value)
     return 0;
   return value.toFixed(5);
+}
+
+function searchResultSelected(result: NominatimResult) {
+  setFieldValue("name", result.display_name);
+  mapStore.addedMapPoint = {
+    id: 1,
+    name: "Added map point",
+    description: "",
+    long: Number(result.lon),
+    lat: Number(result.lat),
+    centerMap: true,
+  };
 }
 
 effect(() => {
@@ -117,13 +131,17 @@ onBeforeRouteLeave(() => {
         :error="errors.description"
         :disabled="loading"
       />
-      <p>
-        Drag the <Icon name="tabler:map-pin-filled" class="text-warning" /> marker to the desired location.
-      </p>
-      <p>Or double click on the specific location on the map.</p>
       <p class="text-xs text-gray-400">
-        Current location: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
+        Current coordinates: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
       </p>
+      <p>To set location coordinates:</p>
+      <ul class="list-disc ml-4 text-sm">
+        <li>
+          Drag the <Icon name="tabler:map-pin-filled" class="text-warning" /> marker on the map.
+        </li>
+        <li>Double click on the specific location on the map.</li>
+        <li>Search for an location with the search bar below.</li>
+      </ul>
       <div class="flex justify-end gap-2">
         <button
           :disabled="loading"
@@ -150,6 +168,6 @@ onBeforeRouteLeave(() => {
       </div>
     </form>
     <div class="divider" />
-    <LocationSearch />
+    <LocationSearch @result-selected="searchResultSelected" />
   </div>
 </template>
