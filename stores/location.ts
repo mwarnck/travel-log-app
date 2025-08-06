@@ -2,7 +2,7 @@ import { useMapStore } from "./map";
 import { useSidebarStore } from "./sidebar";
 
 type Locations = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   lat: number;

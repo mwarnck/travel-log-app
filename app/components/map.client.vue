@@ -23,6 +23,24 @@ onMounted(() => {
   >
     <MglNavigationControl />
     <MglMarker
+      v-if="mapStore.addedMapPoint"
+      draggable
+      :coordinates="CENTER_EUROPE"
+    >
+      <template #marker>
+        <div
+          class="tooltip tooltip-top hover: cursor-pointer"
+          data-tip="Drag to your desired location"
+        >
+          <Icon
+            name="tabler:map-pin-filled"
+            size="37"
+            class="text-warning"
+          />
+        </div>
+      </template>
+    </MglMarker>
+    <MglMarker
       v-for="mapPoint in mapStore.mapPoints"
       :key="mapPoint.id"
       :coordinates="[mapPoint.long, mapPoint.lat]"

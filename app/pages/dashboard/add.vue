@@ -2,8 +2,12 @@
 import type { FetchError } from "ofetch";
 
 import { toTypedSchema } from "@vee-validate/zod";
+import { useMapStore } from "~~/stores/map";
 
+import { CENTER_EUROPE } from "~/lib/constants";
 import { InsertLocation } from "~/lib/db/schema";
+
+const mapStore = useMapStore();
 
 const { $csrfFetch } = useNuxtApp();
 const router = useRouter();
@@ -37,6 +41,16 @@ const onSubmit = handleSubmit(async (values) => {
   loading.value = false;
 });
 
+onMounted(() => {
+  mapStore.addedMapPoint = {
+    id: 1,
+    name: "Added map point",
+    description: "",
+    long: (CENTER_EUROPE as [number, number])[0],
+    lat: (CENTER_EUROPE as [number, number])[1],
+  };
+});
+
 onBeforeRouteLeave(() => {
   if (meta.value.dirty && !submitted.value) {
     // eslint-disable-next-line no-alert
@@ -45,13 +59,14 @@ onBeforeRouteLeave(() => {
       return false;
     }
   }
+  mapStore.addedMapPoint = null;
   return true;
 });
 </script>
 
 <template>
   <div
-    class="container max-w-md mx-auto"
+    class="container max-w-md mx-auto p-4"
   >
     <div class="my-4">
       <h1 class="text-lg">
