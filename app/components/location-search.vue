@@ -36,7 +36,8 @@ async function onSubmit(query: Record<string, string>) {
 function setLocation(location: NominatimResult) {
   emit("resultSelected", location);
   searchResults.value = [];
-  loading.value = true;
+  loading.value = false;
+  hasSearched.value = false;
   searchError.value = "";
   if (form.value)
     form.value?.resetForm();
