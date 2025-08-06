@@ -118,7 +118,7 @@ onBeforeRouteLeave(() => {
         :disabled="loading"
       />
       <p>
-        Drag the <Icon name="tabler:map-pin-filles" class="text-warning" /> marker to the desired location.
+        Drag the <Icon name="tabler:map-pin-filled" class="text-warning" /> marker to the desired location.
       </p>
       <p>Or double click on the specific location on the map.</p>
       <p class="text-xs text-gray-400">
