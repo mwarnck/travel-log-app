@@ -14,9 +14,15 @@ const router = useRouter();
 const loading = ref(false);
 const submitted = ref(false);
 const submitError = ref("");
-const { handleSubmit, errors, meta, setErrors } = useForm({
+const { handleSubmit, errors, meta, setErrors, setFieldValue, controlledValues } = useForm({
   // @ts-expect-error lookup and fix later...
   validationSchema: toTypedSchema(InsertLocation),
+  initialValues: {
+    name: "",
+    description: "",
+    long: (CENTER_EUROPE as [number, number])[0],
+    lat: (CENTER_EUROPE as [number, number])[1],
+  },
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -39,6 +45,19 @@ const onSubmit = handleSubmit(async (values) => {
     submitError.value = error.data?.statusMessage || error.statusMessage || "An unknown error occured!";
   }
   loading.value = false;
+});
+
+function formatNumber(value?: number) {
+  if (!value)
+    return 0;
+  return value.toFixed(5);
+}
+
+effect(() => {
+  if (mapStore.addedMapPoint) {
+    setFieldValue("long", mapStore.addedMapPoint.long);
+    setFieldValue("lat", mapStore.addedMapPoint.lat);
+  }
 });
 
 onMounted(() => {
@@ -98,20 +117,10 @@ onBeforeRouteLeave(() => {
         :error="errors.description"
         :disabled="loading"
       />
-      <FormField
-        name="lat"
-        label="Latitude"
-        type="number"
-        :error="errors.lat"
-        :disabled="loading"
-      />
-      <FormField
-        name="long"
-        label="Longitude"
-        type="number"
-        :error="errors.long"
-        :disabled="loading"
-      />
+      <p>Drag the <Icon name="tabler:map-pin-filles" class="text-warning" /> marker to the desired location.</p>
+      <p class="text-xs text-gray-400">
+        Current location: {{ formatNumber(controlledValues.lat) }}, {{ formatNumber(controlledValues.long) }}
+      </p>
       <div class="flex justify-end gap-2">
         <button
           :disabled="loading"

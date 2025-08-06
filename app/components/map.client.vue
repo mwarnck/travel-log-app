@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { LngLat } from "maplibre-gl";
+
 import { useMapStore } from "~~/stores/map";
 
 import { CENTER_EUROPE } from "~/lib/constants";
@@ -9,6 +11,13 @@ const colorMode = useColorMode();
 const style = computed(() => colorMode.value === "dark" ? "/styles/dark.json" : "https://tiles.openfreemap.org/styles/liberty",
 );
 const zoom = 5;
+
+function updateAddedMapPoint(location: LngLat) {
+  if (mapStore.addedMapPoint) {
+    mapStore.addedMapPoint.long = location.lng;
+    mapStore.addedMapPoint.lat = location.lat;
+  }
+}
 
 onMounted(() => {
   mapStore.init();
@@ -26,10 +35,11 @@ onMounted(() => {
       v-if="mapStore.addedMapPoint"
       draggable
       :coordinates="CENTER_EUROPE"
+      @update:coordinates="updateAddedMapPoint"
     >
       <template #marker>
         <div
-          class="tooltip tooltip-top hover: cursor-pointer"
+          class="tooltip tooltip-top tooltip-open hover: cursor-pointer"
           data-tip="Drag to your desired location"
         >
           <Icon

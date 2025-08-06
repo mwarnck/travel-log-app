@@ -53,6 +53,18 @@ export const useMapStore = defineStore("useMapStore", () => {
         });
       }
     });
+
+    watch(addedMapPoint, (newValue, oldValue) => {
+      if (newValue && !oldValue) {
+        map.map?.flyTo({
+          center: [newValue.long, newValue.lat],
+          speed: 0.6,
+          zoom: 4,
+        });
+      }
+    }, {
+      immediate: true,
+    });
   }
 
   return {
