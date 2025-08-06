@@ -149,5 +149,7 @@ onBeforeRouteLeave(() => {
         </button>
       </div>
     </form>
+    <div class="divider" />
+    <LocationSearch />
   </div>
 </template>
